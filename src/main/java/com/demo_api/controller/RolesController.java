@@ -1,13 +1,22 @@
 package com.demo_api.controller;
 
-import com.demo_api.model.Role;
-import com.demo_api.model.RoleEntity;
-import com.demo_api.model.UserEntity;
+import com.demo_api.assembler.RoleModelAssembler;
+import com.demo_api.assembler.RolePagingAssembler;
+import com.demo_api.Model.Role;
+import com.demo_api.Entity.RoleEntity;
+import com.demo_api.Entity.UserEntity;
 import com.demo_api.repository.RoleRepository;
 import com.demo_api.repository.UserRepository;
+import com.demo_api.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,52 +28,51 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 @RestController
 @RequestMapping(value = "/roles")
 public class RolesController {
+    @Autowired RoleModelAssembler assembler;
+    @Autowired RolePagingAssembler pagingAssembler;
     @Autowired RoleRepository roleRepository;
+    @Autowired PagedResourcesAssembler<RoleEntity> pagedResourcesAssembler;
     @Autowired UserRepository userRepository;
+    @Autowired RoleService roleService;
 
-    public RolesController(RoleRepository roleRepository, UserRepository userRepository) {
-        this.roleRepository = roleRepository;
-        this.userRepository = userRepository;
-    }
     //Get one
     @GetMapping("/{id}")
-    public EntityModel<Role> getOne(@PathVariable Long id) {
+    public  EntityModel<Role> getOne(@PathVariable Long id) {
         RoleEntity roleEntity = roleRepository.findById(id).orElse(new RoleEntity());
-        Role role = new Role(roleEntity.getId(), roleEntity.getName());
-        return EntityModel.of(role,
-                linkTo(methodOn(RolesController.class).getOne(id)).withSelfRel(),
-                linkTo(methodOn(UsersController.class).getUsersByRolesId(id)).withRel("users"));
+        return assembler.toModel(roleEntity);
     }
 
     //Get all
     @GetMapping()
     public CollectionModel<EntityModel<Role>> getAll(){
         List<EntityModel<Role>> roles = roleRepository.findAll().stream()
-                .map(role -> EntityModel.of(new Role(role.getId(), role.getName()),
-                        linkTo(methodOn(RolesController.class).getOne(role.getId())).withSelfRel(),
-                        linkTo(methodOn(UsersController.class).getUsersByRolesId(role.getId())).withRel("users"))
-                ).collect(Collectors.toList());
+                .map(role -> assembler.toModel(role))
+                .collect(Collectors.toList());
         return CollectionModel.of(roles, linkTo(methodOn(RolesController.class).getAll()).withSelfRel());
+    }
+
+    @GetMapping(value = "/paging")
+    public ResponseEntity<PagedModel<EntityModel<Role>>> getAllAlbums(Pageable pageable)
+    {
+        Page<RoleEntity> roles = roleRepository.findAll(pageable);
+        PagedModel<EntityModel<Role>> page = pagedResourcesAssembler.toModel(roles, assembler);
+
+        return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     //Get by privilege id
     @GetMapping("/by_pri/{id}")
     public CollectionModel<EntityModel<Role>> getByPrivilegeId(@PathVariable Long id){
         List<EntityModel<Role>> roles = roleRepository.findRolesByPrivilegeId(id).stream()
-                .map(role -> EntityModel.of(new Role(role.getId(), role.getName()),
-                        linkTo(methodOn(RolesController.class).getOne(role.getId())).withSelfRel(),
-                        linkTo(methodOn(UsersController.class).getUsersByRolesId(role.getId())).withRel("users"))
-                ).collect(Collectors.toList());
+                .map(role -> assembler.toModel(role))
+                .collect(Collectors.toList());
         return CollectionModel.of(roles, linkTo(methodOn(RolesController.class).getByPrivilegeId(id)).withSelfRel());
     }
 
     //Add new
     @PostMapping()
     public EntityModel<Role> addRole(@RequestBody RoleEntity newRoleEntity){
-        roleRepository.save(newRoleEntity);
-        return EntityModel.of(new Role(newRoleEntity.getId(), newRoleEntity.getName()),
-                linkTo(methodOn(RolesController.class).getOne(newRoleEntity.getId())).withSelfRel(),
-                linkTo(methodOn(UsersController.class).getUsersByRolesId(newRoleEntity.getId())).withRel("users"));
+        return assembler.toModel(roleRepository.save(newRoleEntity));
     }
 
     //Update
@@ -84,15 +92,13 @@ public class RolesController {
             return roleRepository.save(newRoleEntity);
         });
 
-        return EntityModel.of(new Role(roleEntity.getId(), roleEntity.getName()),
-                linkTo(methodOn(RolesController.class).getOne(id)).withSelfRel(),
-                linkTo(methodOn(UsersController.class).getUsersByRolesId(id)).withRel("users"));
+        return assembler.toModel(roleEntity);
     }
 
-//    //Delete
-//    @DeleteMapping("/delete/{id}")
-//    public void deleteEmployee(@PathVariable Long id) {
-//        roleRepository.deleteById(id);
-//        return;
-//    }
+    //Delete
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+        roleRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

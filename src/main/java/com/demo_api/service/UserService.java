@@ -1,7 +1,6 @@
 package com.demo_api.service;
 
-import com.demo_api.model.RoleEntity;
-import com.demo_api.model.UserEntity;
+import com.demo_api.Entity.UserEntity;
 import com.demo_api.repository.PrivilegeRepository;
 import com.demo_api.repository.RoleRepository;
 import com.demo_api.repository.UserRepository;

@@ -1,8 +1,7 @@
 package com.demo_api.controller;
 
-import com.demo_api.model.Privilege;
-import com.demo_api.model.PrivilegeEntity;
-import com.demo_api.repository.PrivilegeRepository;
+import com.demo_api.Model.Privilege;
+import com.demo_api.Entity.PrivilegeEntity;
 import com.demo_api.repository.RoleRepository;
 import com.demo_api.service.PrivilegeService;
 import org.springframework.beans.factory.annotation.Autowired;

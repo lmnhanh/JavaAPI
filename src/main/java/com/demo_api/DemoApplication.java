@@ -1,7 +1,7 @@
 package com.demo_api;
 
-import com.demo_api.model.RoleEntity;
-import com.demo_api.model.UserEntity;
+import com.demo_api.Entity.RoleEntity;
+import com.demo_api.Entity.UserEntity;
 import com.demo_api.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

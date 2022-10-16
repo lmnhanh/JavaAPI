@@ -1,6 +1,6 @@
 package com.demo_api.service;
 
-import com.demo_api.model.PrivilegeEntity;
+import com.demo_api.Entity.PrivilegeEntity;
 import com.demo_api.repository.PrivilegeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

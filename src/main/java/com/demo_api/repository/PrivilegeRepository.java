@@ -1,6 +1,6 @@
 package com.demo_api.repository;
 
-import com.demo_api.model.PrivilegeEntity;
+import com.demo_api.Entity.PrivilegeEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

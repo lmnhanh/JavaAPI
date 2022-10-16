@@ -1,4 +1,6 @@
-package com.demo_api.model;
+package com.demo_api.Model;
+
+import com.demo_api.Entity.PrivilegeEntity;
 
 import java.io.Serializable;
 import java.util.Objects;

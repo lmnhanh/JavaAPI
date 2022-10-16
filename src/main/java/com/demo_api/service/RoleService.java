@@ -1,6 +1,7 @@
 package com.demo_api.service;
 
-import com.demo_api.model.RoleEntity;
+import com.demo_api.Entity.RoleEntity;
+import com.demo_api.Model.Role;
 import com.demo_api.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,5 +18,9 @@ public class RoleService{
 
     public List<RoleEntity> getByPrivilegeId(Long id){
         return repository.findRolesByPrivilegeId(id);
+    }
+
+    public Role toDto(RoleEntity role){
+        return new Role(role.getId(), role.getName());
     }
 }

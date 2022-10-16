@@ -1,22 +1,28 @@
-package com.demo_api.model;
+package com.demo_api.Model;
+
+import com.demo_api.Entity.UserEntity;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link RoleEntity} entity
+ * A DTO for the {@link UserEntity} entity
  */
-public class Role implements Serializable {
+public class User implements Serializable {
     private final Long id;
     private final String name;
+    private final String password;
 
-    public Role(){
+    public User(){
         this.id = null;
         this.name = null;
+        this.password = null;
     }
-    public Role(Long id, String name) {
+
+    public User(Long id, String name, String password) {
         this.id = id;
         this.name = name;
+        this.password = password;
     }
 
     public Long getId() {
@@ -27,24 +33,30 @@ public class Role implements Serializable {
         return name;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Role entity = (Role) o;
+        User entity = (User) o;
         return Objects.equals(this.id, entity.id) &&
-                Objects.equals(this.name, entity.name);
+                Objects.equals(this.name, entity.name) &&
+                Objects.equals(this.password, entity.password);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(id, name, password);
     }
 
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
-                "name = " + name + ")";
+                "name = " + name + ", " +
+                "password = " + password + ")";
     }
 }
