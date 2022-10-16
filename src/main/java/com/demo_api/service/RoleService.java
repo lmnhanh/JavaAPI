@@ -1,7 +1,7 @@
 package com.demo_api.service;
 
-import com.demo_api.Entity.RoleEntity;
-import com.demo_api.Model.Role;
+import com.demo_api.entity.RoleEntity;
+import com.demo_api.model.Role;
 import com.demo_api.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

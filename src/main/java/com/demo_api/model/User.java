@@ -1,6 +1,6 @@
-package com.demo_api.Model;
+package com.demo_api.model;
 
-import com.demo_api.Entity.UserEntity;
+import com.demo_api.entity.UserEntity;
 
 import java.io.Serializable;
 import java.util.Objects;

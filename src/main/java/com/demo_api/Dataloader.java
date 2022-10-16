@@ -1,6 +1,6 @@
 package com.demo_api;
 
-import com.demo_api.Entity.UserEntity;
+import com.demo_api.entity.UserEntity;
 import com.demo_api.repository.RoleRepository;
 import com.demo_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;

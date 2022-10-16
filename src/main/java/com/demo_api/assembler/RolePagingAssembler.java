@@ -1,8 +1,8 @@
 package com.demo_api.assembler;
 
 import com.demo_api.controller.RolesController;
-import com.demo_api.Entity.RoleEntity;
-import com.demo_api.Model.Role;
+import com.demo_api.entity.RoleEntity;
+import com.demo_api.model.Role;
 import org.springframework.hateoas.server.mvc.RepresentationModelAssemblerSupport;
 import org.springframework.stereotype.Component;
 

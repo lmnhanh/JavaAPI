@@ -2,9 +2,9 @@ package com.demo_api.controller;
 
 import com.demo_api.assembler.RoleModelAssembler;
 import com.demo_api.assembler.RolePagingAssembler;
-import com.demo_api.Model.Role;
-import com.demo_api.Entity.RoleEntity;
-import com.demo_api.Entity.UserEntity;
+import com.demo_api.model.Role;
+import com.demo_api.entity.RoleEntity;
+import com.demo_api.entity.UserEntity;
 import com.demo_api.repository.RoleRepository;
 import com.demo_api.repository.UserRepository;
 import com.demo_api.service.RoleService;

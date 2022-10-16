@@ -1,4 +1,4 @@
-package com.demo_api.Model;
+package com.demo_api.model;
 
 import org.springframework.hateoas.RepresentationModel;
 
