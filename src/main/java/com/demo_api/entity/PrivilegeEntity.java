@@ -12,6 +12,7 @@ public class PrivilegeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
+    @Column(nullable = false)
     private String name;
 
     @ManyToMany (mappedBy = "privileges")
@@ -21,7 +22,6 @@ public class PrivilegeEntity {
 
     public PrivilegeEntity(){
         this.id = null;
-        this.name = null;
     }
 
     public PrivilegeEntity(Long id, String name, List<RoleEntity> roles) {

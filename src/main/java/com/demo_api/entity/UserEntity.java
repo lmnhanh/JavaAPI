@@ -1,6 +1,10 @@
 package com.demo_api.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import net.bytebuddy.utility.nullability.NeverNull;
+import org.springframework.lang.NonNull;
+import org.springframework.lang.NonNullFields;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 
@@ -10,19 +14,18 @@ public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(nullable = false)
     private String name;
+    @Column(nullable = false)
     private String password;
 
     @ManyToOne()
+    @Nullable
     @JoinColumn(name = "role_id")
-//    @JsonIgnore
-    @JsonIgnoreProperties(value = "users")
     private RoleEntity role;
 
     public UserEntity(){
         this.id = null;
-        this.name = null;
-        this.password = null;
     }
 
     public UserEntity(Long id, String name, String password) {

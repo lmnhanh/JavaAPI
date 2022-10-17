@@ -53,7 +53,7 @@ public class PrivilegesController {
                                 linkTo(methodOn(PrivilegesController.class).getOne(privilege.getId())).withSelfRel(),
                                 linkTo(methodOn(RolesController.class).getByPrivilegeId(privilege.getId())).withRel("roles"))
                 ).collect(Collectors.toList());
-        return CollectionModel.of(privileges, linkTo(methodOn(RolesController.class).getAll()).withSelfRel());
+        return CollectionModel.of(privileges, linkTo(methodOn(PrivilegesController.class).getAll()).withSelfRel());
     }
 
     //Get by role id

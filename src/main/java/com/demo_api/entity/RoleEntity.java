@@ -12,29 +12,31 @@ public class RoleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private  Long id;
+    @Column(nullable = false)
     private  String name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
-//    @JsonIgnore
-    @JsonIgnoreProperties(value = "role")
     private List<UserEntity> users = new ArrayList<>();
 
     @ManyToMany()
-    @JsonIgnoreProperties(value = "roles")
-//    @JsonIgnore
     private List<PrivilegeEntity> privileges = new ArrayList<>();
 
     public RoleEntity() {
     }
 
-    public RoleEntity(Long id, String name) {
-        this.id = id;
+    public RoleEntity(String name, List<PrivilegeEntity> privileges) {
         this.name = name;
+        this.privileges = privileges;
     }
 
     public RoleEntity(String name) {
         this.id = id;
+    }
+
+    public RoleEntity(Long id, String name, List<PrivilegeEntity> privileges) {
+        this.id = id;
         this.name = name;
+        this.privileges = privileges;
     }
 
     public RoleEntity(Long id, String name, List<UserEntity> userEntities, List<PrivilegeEntity> privileges) {
