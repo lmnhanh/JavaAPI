@@ -12,13 +12,4 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 	}
-
-	public CommandLineRunner dataloader(UserRepository userRepository){
-		return new CommandLineRunner() {
-			@Override
-			public void run(String... args) throws Exception {
-				userRepository.save(new UserEntity("abc", "123", new RoleEntity("admin")));
-			}
-		};
-	}
 }

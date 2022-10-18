@@ -14,34 +14,40 @@ public class RoleEntity {
     private  Long id;
     @Column(nullable = false)
     private  String name;
-
+    @Column(nullable = false)
+    private int status;
     @OneToMany(mappedBy = "role", cascade = CascadeType.REMOVE)
     private List<UserEntity> users = new ArrayList<>();
-
     @ManyToMany()
     private List<PrivilegeEntity> privileges = new ArrayList<>();
 
     public RoleEntity() {
+        this.id = null;
+        this.name = null;
+        this.status = 1;
     }
 
     public RoleEntity(String name, List<PrivilegeEntity> privileges) {
         this.name = name;
         this.privileges = privileges;
+        this.status = 1;
     }
 
     public RoleEntity(String name) {
-        this.id = id;
+        this.name = name;
+        this.status = 1;
     }
 
-    public RoleEntity(Long id, String name, List<PrivilegeEntity> privileges) {
-        this.id = id;
+    public RoleEntity(String name, int status, List<PrivilegeEntity> privileges) {
         this.name = name;
+        this.status = status;
         this.privileges = privileges;
     }
 
-    public RoleEntity(Long id, String name, List<UserEntity> userEntities, List<PrivilegeEntity> privileges) {
+    public RoleEntity(Long id, String name, int status, List<UserEntity> userEntities, List<PrivilegeEntity> privileges) {
         this.id = id;
         this.name = name;
+        this.status = status;
         this.users = userEntities;
         this.privileges = privileges;
     }
@@ -86,5 +92,13 @@ public class RoleEntity {
 
     public void setUsers(List<UserEntity> users) {
         this.users = users;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

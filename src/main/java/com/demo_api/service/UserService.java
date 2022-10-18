@@ -41,7 +41,8 @@ public class UserService {
     public void delete(Long id){
         if(repository.findById(id).isPresent()){
             UserEntity user = repository.findById(id).get();
-            repository.delete(user);
+            user.setStatus(0);
+            repository.save(user);
         }
     }
     public UserEntity save(UserEntity user){
@@ -49,6 +50,6 @@ public class UserService {
     }
 
     public User toDto(UserEntity user){
-        return new User(user.getId(), user.getName(), user.getPassword());
+        return new User(user.getId(), user.getName(), user.getPassword(), user.getStatus());
     }
 }

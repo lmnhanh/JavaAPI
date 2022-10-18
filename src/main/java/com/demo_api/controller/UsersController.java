@@ -50,7 +50,7 @@ public class UsersController {
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/by_role/{id}")
+    @GetMapping(value = "/role/{id}")
     public ResponseEntity<CollectionModel<EntityModel<User>>> getUsersByRolesId(@PathVariable Long id){
         List<EntityModel<User>> users = userService.getByRoleId(id).stream()
                 .map(user -> assembler.toModel(user))
@@ -83,19 +83,23 @@ public class UsersController {
     //To update a user with no role: {"name": "Admin", "password": "456"}
     //To update a user with role: {"name": "Admin", "password": "456", "role":{"id":1}}
     @PutMapping(value = "/update/{id}")
-    public ResponseEntity<EntityModel<User>> updateRole(@RequestBody UserEntity newUser, @PathVariable Long id) {
+    public ResponseEntity<EntityModel<User>> updateUser(@RequestBody UserEntity newUser, @PathVariable Long id) {
         UserEntity user = userService.get(id);
         if(user.getId() == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        userService.update(user, newUser);
-        return new ResponseEntity<>(assembler.toModel(user), HttpStatus.OK);
+        try{
+            userService.update(user, newUser);
+            return new ResponseEntity<>(assembler.toModel(user), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     //Delete
     //Test with: http://localhost:8060/users/delete/1
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         if(userService.get(id).getId() == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -20,12 +20,10 @@ public class RoleService{
         return repository.findById(id).orElse(new RoleEntity());
     }
 
-    public List<RoleEntity> getAll(){
-        return repository.findAll();
-    }
-
-    public Page<RoleEntity> getAll(Pageable pageable){
-        return repository.findAll(pageable);
+    public Page<RoleEntity> getAll(int status, Pageable pageable){
+        if(status == -1)
+            return repository.findAll(pageable);
+        return repository.findByStatus(status,pageable);
     }
 
     public List<RoleEntity> getByPrivilegeId(Long id){
@@ -34,6 +32,7 @@ public class RoleService{
 
     public RoleEntity update(RoleEntity oldRole, RoleEntity newRole){
         oldRole.setName(newRole.getName());
+        oldRole.setStatus(newRole.getStatus());
         oldRole.setPrivileges(newRole.getPrivileges());
         return repository.save(oldRole);
     }
@@ -46,7 +45,8 @@ public class RoleService{
                 userService.save(user);
             }
             role.setUsers(null);
-            repository.delete(role);
+            role.setStatus(0);
+            repository.save(role);
         }
     }
 
@@ -55,6 +55,6 @@ public class RoleService{
     }
 
     public Role toDto(RoleEntity role){
-        return new Role(role.getId(), role.getName());
+        return new Role(role.getId(), role.getName(), role.getStatus());
     }
 }

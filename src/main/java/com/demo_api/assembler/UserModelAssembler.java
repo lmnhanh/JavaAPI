@@ -18,11 +18,11 @@ public class UserModelAssembler implements RepresentationModelAssembler<UserEnti
     @Override
     public EntityModel<User> toModel(UserEntity entity) {
         if(entity.getRole() == null){
-            return EntityModel.of(new User(entity.getId(), entity.getName(), entity.getPassword()),
+            return EntityModel.of(new User(entity.getId(), entity.getName(), entity.getPassword(), entity.getStatus()),
                     linkTo(methodOn(UsersController.class).getOne(entity.getId())).withSelfRel()
             );
         }
-        return EntityModel.of(new User(entity.getId(), entity.getName(), entity.getPassword()),
+        return EntityModel.of(new User(entity.getId(), entity.getName(), entity.getPassword(), entity.getStatus()),
                 linkTo(methodOn(UsersController.class).getOne(entity.getId())).withSelfRel(),
                 linkTo(methodOn(RolesController.class).getOne(entity.getRole().getId())).withRel("role"));
     }

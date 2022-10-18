@@ -16,8 +16,6 @@ public class PrivilegeEntity {
     private String name;
 
     @ManyToMany (mappedBy = "privileges")
-//    @JsonIgnore
-    @JsonIgnoreProperties(value = "privileges")
     private List<RoleEntity> roles = new ArrayList<>();
 
     public PrivilegeEntity(){

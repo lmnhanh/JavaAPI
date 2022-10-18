@@ -43,18 +43,18 @@ public class RolesController {
 
     //Get all with paging
     //Test with: http://localhost:8060/roles?page=0&size=2&sort=id,asc
-    //page=0 -> trang 1, size=2 -> 2 role mỗi trang, sort=id,asc -> sắp xếp tăng dần theo id
+    //Test with: http://localhost:8060/roles?status=1&page=0&size=2&sort=id,asc
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<Role>>> getAllWithPaging(Pageable pageable)
-    {
-        Page<RoleEntity> roles = roleService.getAll(pageable);
+    public ResponseEntity<PagedModel<EntityModel<Role>>> getAll(@RequestParam(defaultValue = "-1") int status,
+                                                                Pageable pageable) {
+        Page<RoleEntity> roles = roleService.getAll(status, pageable);
         PagedModel<EntityModel<Role>> page = pagedResourcesAssembler.toModel(roles, assembler);
-        page.add(linkTo(methodOn(RolesController.class).getAllWithPaging(pageable)).withSelfRel());
+        page.add(linkTo(methodOn(RolesController.class).getAll(status,pageable)).withSelfRel());
         return new ResponseEntity<>(page, HttpStatus.OK);
     }
 
     //Get by privilege id
-    @GetMapping("/by_pri/{id}")
+    @GetMapping("/privileges/{id}")
     public ResponseEntity<CollectionModel<EntityModel<Role>>> getByPrivilegeId(@PathVariable Long id){
         List<EntityModel<Role>> roles = roleService.getByPrivilegeId(id).stream()
                 .map(role -> assembler.toModel(role))
@@ -86,21 +86,25 @@ public class RolesController {
     //Test with: http://localhost:8060/roles/update/1
     //In request body:
     //To set role with no privileges: {"name": "Sales Manager"}
-    //To set role with with privileges: {"name": "Sales Manager", "privileges":[{"id":1}]}
+    //To set role with privileges: {"name": "Sales Manager", "privileges":[{"id":1}]}
     @PutMapping(value = "/update/{id}")
     public ResponseEntity<EntityModel<Role>> updateRole(@RequestBody RoleEntity newRole, @PathVariable Long id) {
         RoleEntity role = roleService.get(id);
         if(role.getId() == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        roleService.update(role, newRole);
-        return new ResponseEntity<>(assembler.toModel(role), HttpStatus.OK);
+        try{
+            roleService.update(role, newRole);
+            return new ResponseEntity<>(assembler.toModel(role), HttpStatus.OK);
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     //Delete
     //Test with: http://localhost:8060/roles/delete/1
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteEmployee(@PathVariable Long id) {
+    public ResponseEntity<?> deleteRole(@PathVariable Long id) {
         if(roleService.get(id).getId() == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
