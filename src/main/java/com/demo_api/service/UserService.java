@@ -19,16 +19,15 @@ public class UserService {
     public UserEntity get(Long id){
         return repository.findById(id).orElse(new UserEntity());
     }
-    public List<UserEntity> getByRoleId(Long id){
-        return repository.findUsersByRoleId(id);
-    }
 
-    public List<UserEntity> getAll(){
-        return repository.findAll();
-    }
-
-    public Page<UserEntity> getAll(Pageable pageable){
-        return repository.findAll(pageable);
+    public Page<UserEntity> getAll(Long role, int status, Pageable pageable){
+        if(role == -1L && status == -1)
+            return repository.findAll(pageable);
+        if(role != -1L && status != -1)
+            return repository.findByStatusAndRole(status, role, pageable);
+        if(status != -1)
+            return repository.findByStatus(status, pageable);
+        return repository.findByRoleId(role, pageable);
     }
 
     public UserEntity update(UserEntity oldUser, UserEntity newUser){

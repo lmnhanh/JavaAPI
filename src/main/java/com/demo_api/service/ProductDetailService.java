@@ -21,6 +21,9 @@ public class ProductDetailService {
     public List<ProductDetailEntity> getByProductId(Long id){
         return repository.findByProductId(id);
     }
+    public List<ProductDetailEntity> getAll(Long product, String size, int stock){
+        return repository.findAll();
+    }
 
     public void update (ProductDetailEntity oldDetail, ProductDetailEntity newDetail){
         if(newDetail.getSize() != null)

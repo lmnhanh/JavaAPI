@@ -2,8 +2,6 @@ package com.demo_api.controller;
 
 import com.demo_api.assembler.ProductDetailModelAssembler;
 import com.demo_api.entity.ProductDetailEntity;
-import com.demo_api.entity.ProductEntity;
-import com.demo_api.model.Product;
 import com.demo_api.model.ProductDetail;
 import com.demo_api.service.ProductDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +37,17 @@ public class ProductDetailsController {
         return new ResponseEntity<>(assembler.toModel(detail), HttpStatus.OK);
     }
 
+    @GetMapping()
+    public ResponseEntity<CollectionModel<EntityModel<ProductDetail>>> getAll(@RequestParam Long product,
+                                                             @RequestParam(defaultValue = "*") String size,
+                                                             @RequestParam(defaultValue = "1") int stock) {
+        List<EntityModel<ProductDetail>> details = detailService.getAll(product, size, stock).stream()
+                .map(assembler::toModel).collect(Collectors.toList());
+        return new ResponseEntity<>(
+                CollectionModel.of(details,linkTo(methodOn(ProductDetailsController.class).getAll(product, size,stock)).withSelfRel())
+                ,HttpStatus.OK);
+    }
+
     @GetMapping(value = "/product/{id}")
     public ResponseEntity<CollectionModel<EntityModel<ProductDetail>>> getByProductId(@PathVariable Long id) {
         List<EntityModel<ProductDetail>> details = detailService.getByProductId(id).stream()
@@ -52,8 +61,9 @@ public class ProductDetailsController {
     //Add new
     //Test with:
     //In request body: {"size": "40","color": "Đen","price": 10000,"stock": 22,"product": {"id":1}}
-    //In request body: {"size": "38","color": "Đen", "material": "Vải","price": 10000,"stock": 10,"product": {"id":2}}
-    //In request body: {"size": "12","color": "Đen","price": 10000,"stock": 22,"product": {"id":1}}
+    //In request body: {"size": "38","color": "Đen", "material": "Vải","price": 10000,"stock": 10,"product": {"id":1}}
+    //In request body: {"size": "41","color": "Trắng","price": 10000,"stock": 22,"product": {"id":1}}
+    //Sản phẩm id = 1 sẽ có 3 size là 40, 38 và 41
     @PostMapping()
     public ResponseEntity<EntityModel<ProductDetail>> addProductDetail(@RequestBody ProductDetailEntity newDetail){
         try{
@@ -66,14 +76,14 @@ public class ProductDetailsController {
     }
 
     //Update
-    //Test with: http://localhost:8060/details/update/1
+    //Test with: http://localhost:8060/details/1/update
     //In request body: {"product":{"id":1}}
     //In request body: {"size":"45"}
     //In request body: {"price":10000}
     //In request body: {"stock":102}
     //In request body: {"size":"33", "color":"Black"}
     //In request body: {"size":"33", "color":"Black", "material": "Paper"}
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}/update")
     public ResponseEntity<EntityModel<ProductDetail>> updateProductDetail(@RequestBody ProductDetailEntity newDetail, @PathVariable Long id) {
         ProductDetailEntity detail = detailService.get(id);
         if(detail.getId() == null){
@@ -88,9 +98,9 @@ public class ProductDetailsController {
     }
 
     //Delete
-    //Test with: http://localhost:8060/roles/delete/1
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+    //Test with: http://localhost:8060/details/1/delete
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<?> deleteProductDetail(@PathVariable Long id) {
         if(detailService.get(id).getId() == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

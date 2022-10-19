@@ -41,24 +41,14 @@ public class UsersController {
 
     //Get all with paging
     //Test with: http://localhost:8060/users?page=0&size=2&sort=id,asc
-    //page=0 -> trang 1, size=2 -> 2 user mỗi trang, sort=id,asc -> sắp xếp tăng dần theo id
+    //Test with: http://localhost:8060/users?role=1
+    //Test with: http://localhost:8060/users?role=2&status=1&size=2
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<User>>> getAllWithPaging(Pageable pageable){
-        Page<UserEntity> users = userService.getAll(pageable);
+    public ResponseEntity<PagedModel<EntityModel<User>>> getAll(@RequestParam(defaultValue = "-1") Long role, @RequestParam(defaultValue = "-1") int status, Pageable pageable){
+        Page<UserEntity> users = userService.getAll(role, status, pageable);
         PagedModel<EntityModel<User>> page = pagedResourcesAssembler.toModel(users, assembler);
-        page.add(linkTo(methodOn(UsersController.class).getAllWithPaging(pageable)).withSelfRel());
+        page.add(linkTo(methodOn(UsersController.class).getAll(role, status, pageable)).withSelfRel());
         return new ResponseEntity<>(page, HttpStatus.OK);
-    }
-
-    @GetMapping(value = "/role/{id}")
-    public ResponseEntity<CollectionModel<EntityModel<User>>> getUsersByRolesId(@PathVariable Long id){
-        List<EntityModel<User>> users = userService.getByRoleId(id).stream()
-                .map(user -> assembler.toModel(user))
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(
-                CollectionModel.of(users, linkTo(methodOn(UsersController.class).getUsersByRolesId(id)).withSelfRel()),
-                HttpStatus.OK
-        );
     }
 
     //Add new
@@ -78,11 +68,11 @@ public class UsersController {
         }
     }
     //Update
-    //Test with: http://localhost:8060/users/update/1
+    //Test with: http://localhost:8060/users/1/update
     //In request body:
     //To update a user with no role: {"name": "Admin", "password": "456"}
     //To update a user with role: {"name": "Admin", "password": "456", "role":{"id":1}}
-    @PutMapping(value = "/update/{id}")
+    @PutMapping(value = "/{id}/update")
     public ResponseEntity<EntityModel<User>> updateUser(@RequestBody UserEntity newUser, @PathVariable Long id) {
         UserEntity user = userService.get(id);
         if(user.getId() == null){
@@ -97,8 +87,8 @@ public class UsersController {
     }
 
     //Delete
-    //Test with: http://localhost:8060/users/delete/1
-    @DeleteMapping("/delete/{id}")
+    //Test with: http://localhost:8060/users/1/delete
+    @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         if(userService.get(id).getId() == null){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

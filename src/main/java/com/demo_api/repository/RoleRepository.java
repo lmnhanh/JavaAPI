@@ -14,6 +14,11 @@ import java.util.List;
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
     public Page<RoleEntity> findAll(Pageable pageable);
     public Page<RoleEntity> findByStatus(int status, Pageable pageable);
-    @Query("SELECT r FROM RoleEntity r JOIN r.privileges p where p.id = :id")
+    @Query("SELECT r FROM RoleEntity r JOIN r.privileges p WHERE p.id = :id")
+    public Page<RoleEntity> findByPrivilegeId(@Param("id") Long id, Pageable pageable);
+    @Query("SELECT r FROM RoleEntity r JOIN r.privileges p WHERE p.id = :id AND r.status= :status")
+    public Page<RoleEntity> findByStatusAndPrivilegeId(@Param("status") int status, @Param("id") Long id, Pageable pageable);
+
+    @Query("SELECT r FROM RoleEntity r JOIN r.privileges p WHERE p.id = :id")
     public List<RoleEntity> findRolesByPrivilegeId(@Param("id") Long id);
 }

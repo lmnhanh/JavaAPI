@@ -4,7 +4,7 @@ import com.demo_api.controller.RolesController;
 import com.demo_api.controller.UsersController;
 import com.demo_api.entity.RoleEntity;
 import com.demo_api.entity.UserEntity;
-import com.demo_api.model.Role;
+
 import com.demo_api.model.User;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;

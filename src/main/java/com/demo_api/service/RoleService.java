@@ -20,10 +20,14 @@ public class RoleService{
         return repository.findById(id).orElse(new RoleEntity());
     }
 
-    public Page<RoleEntity> getAll(int status, Pageable pageable){
-        if(status == -1)
+    public Page<RoleEntity> getAll(int status, Long privilege, Pageable pageable){
+        if(privilege == -1L && status == -1)
             return repository.findAll(pageable);
-        return repository.findByStatus(status,pageable);
+        if(privilege != -1L && status != -1)
+            return repository.findByStatusAndPrivilegeId(status, privilege, pageable);
+        if(status != -1)
+            return repository.findByStatus(status, pageable);
+        return repository.findByPrivilegeId(privilege,pageable);
     }
 
     public List<RoleEntity> getByPrivilegeId(Long id){
