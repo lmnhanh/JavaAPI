@@ -5,6 +5,8 @@ import com.demo_api.entity.RoleEntity;
 import com.demo_api.entity.UserEntity;
 import com.demo_api.repository.ProductDetailRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +24,19 @@ public class ProductDetailService {
         return repository.findByProductId(id);
     }
     public List<ProductDetailEntity> getAll(Long product, String size, int stock){
-        return repository.findAll();
+        if(size.compareTo("*") == 0) {
+            if (stock > 0)
+                return repository.findInStock(product);
+            if (stock < 0)
+                return repository.findOutStock(product);
+            return repository.findByProductId(product);
+        } else{
+            if(stock > 0)
+                return repository.findInStockBySize(size, product);
+            if(stock < 0)
+                return repository.findOutStockBySize(size, product);
+            return repository.findBySizeAndProductId(size, product);
+        }
     }
 
     public void update (ProductDetailEntity oldDetail, ProductDetailEntity newDetail){

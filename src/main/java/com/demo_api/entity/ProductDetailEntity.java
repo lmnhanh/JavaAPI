@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "product_detail")
+@Table(name = "product_details")
 public class ProductDetailEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class ProductDetailEntity {
 
     @OneToMany
     @JoinColumn(name = "detail_id")
-    private List<OrderEntity> orders = new ArrayList<>();
+    private List<CartEntity> orders = new ArrayList<>();
 
     public ProductDetailEntity() {
         this.id = null;
@@ -103,7 +103,7 @@ public class ProductDetailEntity {
         this.product = product;
     }
 
-    public ProductDetailEntity(Long id, String size, String color, String material, String image, int stock, Long price, ProductEntity product, List<OrderEntity> orders) {
+    public ProductDetailEntity(Long id, String size, String color, String material, String image, int stock, Long price, ProductEntity product, List<CartEntity> orders) {
         this.id = id;
         this.size = size;
         this.color = color;
@@ -163,11 +163,11 @@ public class ProductDetailEntity {
         this.product = product;
     }
 
-    public List<OrderEntity> getOrders() {
+    public List<CartEntity> getOrders() {
         return orders;
     }
 
-    public void setOrders(List<OrderEntity> orders) {
+    public void setOrders(List<CartEntity> orders) {
         this.orders = orders;
     }
 

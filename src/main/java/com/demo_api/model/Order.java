@@ -1,25 +1,21 @@
 package com.demo_api.model;
 
+import java.util.Date;
+
 public class Order {
     private final Long id;
-    private final int quantity;
-    private final int status;
+    private final Date created_at;
 
-    public Order(Long id, int quantity, int status) {
+    public Order(Long id, Date created_at) {
         this.id = id;
-        this.quantity = quantity;
-        this.status = status;
+        this.created_at = created_at;
     }
 
     public Long getId() {
         return id;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public int getStatus() {
-        return status;
+    public Date getCreated_at() {
+        return created_at;
     }
 }

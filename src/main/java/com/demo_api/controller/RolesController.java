@@ -36,26 +36,18 @@ public class RolesController {
     @Autowired
     RoleModelAssembler assembler;
     @Autowired
-    PrivilegeModelAssembler privilegeModelAssembler;
-    @Autowired
-    PrivilegeService privilegeService;
-    @Autowired
     PagedResourcesAssembler<RoleEntity> pagedResourcesAssembler;
     @Autowired
     RoleService roleService;
-    @Autowired
-    UserModelAssembler userAssembler;
-    @Autowired
-    UserService userService;
 
     //Get one
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Role>> getOne(@PathVariable Long id) {
-        RoleEntity roleEntity = roleService.get(id);
-        if(roleEntity.getId() == null){
+        RoleEntity role = roleService.get(id);
+        if(role.getId() == null){
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(assembler.toModel(roleEntity), HttpStatus.OK);
+        return new ResponseEntity<>(assembler.toModel(role), HttpStatus.OK);
     }
 
     //Get all with paging

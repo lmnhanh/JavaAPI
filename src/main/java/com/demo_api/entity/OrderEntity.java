@@ -1,48 +1,39 @@
 package com.demo_api.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 public class OrderEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
-    private int quantity;
+    private Date created_at = new Date();
 
-    private int status;
-
-    @ManyToOne
-    @JoinColumn(name = "detail_id")
-    private ProductDetailEntity detail;
-
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @ManyToOne()
     private UserEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "receipt_id")
-    private ReceiptEntity receipt;
+    @OneToMany(mappedBy = "order")
+    private List<CartEntity> carts = new ArrayList<>();
 
     public OrderEntity() {
         this.id = null;
-        this.quantity = 0;
     }
 
-    public OrderEntity(int quantity, int status) {
-        this.quantity = quantity;
-        this.status = status;
-    }
-
-    public OrderEntity(Long id, int quantity, int status, ProductDetailEntity detail, UserEntity user, ReceiptEntity receipt) {
-        this.id = id;
-        this.quantity = quantity;
-        this.status = status;
-        this.detail = detail;
+    public OrderEntity(UserEntity user, List<CartEntity> carts) {
         this.user = user;
-        this.receipt = receipt;
+        this.carts = carts;
+    }
+
+    public OrderEntity(Long id, Date created_at, UserEntity user,List<CartEntity> carts) {
+        this.id = id;
+        this.created_at = created_at;
+        this.user = user;
+        this.carts = carts;
     }
 
     public Long getId() {
@@ -53,30 +44,6 @@ public class OrderEntity {
         this.id = id;
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public ProductDetailEntity getDetail() {
-        return detail;
-    }
-
-    public void setDetail(ProductDetailEntity detail) {
-        this.detail = detail;
-    }
-
     public UserEntity getUser() {
         return user;
     }
@@ -85,11 +52,18 @@ public class OrderEntity {
         this.user = user;
     }
 
-    public ReceiptEntity getReceipt() {
-        return receipt;
+    public List<CartEntity> getCarts() {
+        return carts;
     }
 
-    public void setReceipt(ReceiptEntity receipt) {
-        this.receipt = receipt;
+    public void setCarts(List<CartEntity> carts) {
+        this.carts = carts;
+    }
+
+    public Date getCreated_at() {
+        return created_at;
+    }
+    public void setCreated_at(Date created_at) {
+        this.created_at = created_at;
     }
 }

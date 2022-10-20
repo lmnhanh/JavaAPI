@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "privilege")
+@Table(name = "privileges")
 public class PrivilegeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

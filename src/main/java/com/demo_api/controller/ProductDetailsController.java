@@ -37,6 +37,8 @@ public class ProductDetailsController {
         return new ResponseEntity<>(assembler.toModel(detail), HttpStatus.OK);
     }
 
+    //Get all details of provided product
+    //stock: -1: Các chi tiết hết hàng, 1: Các chi tiết còn hàng (mặc định), 0: Lấy tất cả
     @GetMapping()
     public ResponseEntity<CollectionModel<EntityModel<ProductDetail>>> getAll(@RequestParam Long product,
                                                              @RequestParam(defaultValue = "*") String size,
@@ -44,8 +46,8 @@ public class ProductDetailsController {
         List<EntityModel<ProductDetail>> details = detailService.getAll(product, size, stock).stream()
                 .map(assembler::toModel).collect(Collectors.toList());
         return new ResponseEntity<>(
-                CollectionModel.of(details,linkTo(methodOn(ProductDetailsController.class).getAll(product, size,stock)).withSelfRel())
-                ,HttpStatus.OK);
+                CollectionModel.of(details,linkTo(methodOn(ProductDetailsController.class).getAll(product, size,stock)).withSelfRel()),
+                HttpStatus.OK);
     }
 
     @GetMapping(value = "/product/{id}")

@@ -53,7 +53,7 @@ public class ProductsController {
         List<EntityModel<ProductDetail>> details = detailService.getByProductId(id).stream()
                 .map(detailAssembler::toModel).collect(Collectors.toList());
         return new ResponseEntity<>(
-                CollectionModel.of(details, linkTo(methodOn(ProductDetailsController.class).getByProductId(id)).withSelfRel()),
+                CollectionModel.of(details, linkTo(methodOn(ProductDetailsController.class).getAll(id,"*",0)).withSelfRel()),
                 HttpStatus.OK
         );
     }

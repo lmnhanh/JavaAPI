@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,10 +24,10 @@ public class UserEntity {
     private RoleEntity role;
 
     @OneToMany(mappedBy = "user")
-    private List<ReceiptEntity> receipts;
+    private List<OrderEntity> orders;
 
     @OneToMany(mappedBy = "user")
-    private List<OrderEntity> orders;
+    private List<CartEntity> carts;
 
     public UserEntity(){
         this.id = null;
@@ -55,6 +55,24 @@ public class UserEntity {
         this.status = status;
     }
 
+    public UserEntity(Long id, String name, String password, int status, @Nullable RoleEntity role, List<CartEntity> carts) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.status = status;
+        this.role = role;
+        this.carts = carts;
+    }
+
+    public UserEntity(Long id, String name, String password, int status, @Nullable RoleEntity role, List<OrderEntity> orders, List<CartEntity> carts) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
+        this.status = status;
+        this.role = role;
+        this.orders = orders;
+        this.carts = carts;
+    }
 
     public Long getId() {
         return id;
@@ -96,19 +114,19 @@ public class UserEntity {
         this.status = status;
     }
 
-    public List<ReceiptEntity> getReceipts() {
-        return receipts;
-    }
-
-    public void setReceipts(List<ReceiptEntity> receipts) {
-        this.receipts = receipts;
-    }
-
     public List<OrderEntity> getOrders() {
         return orders;
     }
 
     public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
+    }
+
+    public List<CartEntity> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<CartEntity> carts) {
+        this.carts = carts;
     }
 }
