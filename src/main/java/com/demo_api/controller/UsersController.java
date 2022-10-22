@@ -40,9 +40,9 @@ public class UsersController {
     }
 
     //Get all with paging
-    //Test with: http://localhost:8060/users?page=0&size=2&sort=id,asc
-    //Test with: http://localhost:8060/users?role=1
-    //Test with: http://localhost:8060/users?role=2&status=1&size=2
+    //Lấy tất cả user: http://localhost:8060/users?page=0&size=2&sort=id,asc
+    //Lấy tất cả user có role_id là 1: ""Test with: http://localhost:8060/users?role=1
+    //Lấy tất cả user còn đang hoạt động (status = 1) có role_id là 2 và phân 2 user mỗi trang: http://localhost:8060/users?role=2&status=1&size=2
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<User>>> getAll(@RequestParam(defaultValue = "-1") Long role, @RequestParam(defaultValue = "-1") int status, Pageable pageable){
         Page<UserEntity> users = userService.getAll(role, status, pageable);
@@ -54,24 +54,24 @@ public class UsersController {
     //Add new
     //Test with: http://localhost:8060/users
     //In request body:
-    //To add user with a role: {"name": "ABC", "password":"abc","role": [{"id": 1}]}
-    //To add user with no role: {"name": "Sales", "password":"123"}
+    //Thêm user với role_id "1" (role phải có trước đó): {"name": "ABC", "password":"abc","role": [{"id": 1}]}
+    //Thêm user không có role nào (test): {"name": "Sales", "password":"123"}
     @PostMapping()
     public ResponseEntity<EntityModel<User>> addUser(@RequestBody UserEntity newUser){
         try{
             return new ResponseEntity<>(
-                    assembler.toModel(userService.save(newUser)),
+                    assembler.toModel(userService.addUserWithRole(newUser)),
                     HttpStatus.CREATED
             );
         }catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
-    //Update
-    //Test with: http://localhost:8060/users/1/update
+
+    //Update cho user có id là "1": http://localhost:8060/users/1/update
     //In request body:
-    //To update a user with no role: {"name": "Admin", "password": "456"}
-    //To update a user with role: {"name": "Admin", "password": "456", "role":{"id":1}}
+    //Gán user không có role: {"name": "Admin", "password": "456"}
+    //Gán cho user 1 role mới : {"name": "Admin", "password": "456", "role":{"id":1}}
     @PutMapping(value = "/{id}/update")
     public ResponseEntity<EntityModel<User>> updateUser(@RequestBody UserEntity newUser, @PathVariable Long id) {
         UserEntity user = userService.get(id);

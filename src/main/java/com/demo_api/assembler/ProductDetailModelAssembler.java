@@ -16,8 +16,8 @@ public class ProductDetailModelAssembler implements RepresentationModelAssembler
     @Override
     public EntityModel<ProductDetail> toModel(ProductDetailEntity entity) {
         if(entity.getId() == null)
-            return EntityModel.of(new ProductDetail(entity.getId(), entity.getSize(), entity.getColor(), entity.getMaterial(), entity.getImage(),entity.getStock(), entity.getPrice(), entity.getStatus()));
-        return EntityModel.of(new ProductDetail(entity.getId(), entity.getSize(), entity.getColor(), entity.getMaterial(), entity.getImage(), entity.getStock(), entity.getPrice(), entity.getStatus()),
+            return EntityModel.of(new ProductDetail(entity.getId(), entity.getSize(), entity.getGender(), entity.getOrigin(), entity.getImage(),entity.getStock(), entity.getPrice(), entity.getStatus()));
+        return EntityModel.of(new ProductDetail(entity.getId(), entity.getSize(), entity.getGender(), entity.getOrigin(), entity.getImage(), entity.getStock(), entity.getPrice(), entity.getStatus()),
                 linkTo(methodOn(ProductDetailsController.class).getOne(entity.getId())).withSelfRel(),
                 linkTo(methodOn(ProductsController.class).getOne(entity.getProduct().getId())).withRel("product")
         );

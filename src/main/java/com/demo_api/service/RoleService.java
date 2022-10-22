@@ -4,6 +4,7 @@ import com.demo_api.entity.RoleEntity;
 import com.demo_api.entity.UserEntity;
 import com.demo_api.model.Role;
 import com.demo_api.repository.RoleRepository;
+import com.demo_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,11 +14,17 @@ import java.util.List;
 
 @Service
 public class RoleService{
-    @Autowired RoleRepository repository;
-    @Autowired UserService userService;
+    @Autowired
+    RoleRepository repository;
+    @Autowired
+    UserRepository userRepository;
 
     public RoleEntity get(Long id){
         return repository.findById(id).orElse(new RoleEntity());
+    }
+
+    public RoleEntity getByNameIgnoreCase(String name){
+        return repository.findByNameIgnoreCase(name);
     }
 
     public Page<RoleEntity> getAll(int status, Long privilege, Pageable pageable){
@@ -46,7 +53,7 @@ public class RoleService{
             RoleEntity role = repository.findById(id).get();
             for(UserEntity user : role.getUsers()){
                 user.setRole(null);
-                userService.save(user);
+                userRepository.save(user);
             }
             role.setUsers(null);
             role.setStatus(0);

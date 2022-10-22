@@ -12,8 +12,8 @@ public class ProductDetailEntity {
     private Long id;
 
     private String size;
-    private String color;
-    private String material;
+    private String origin;
+    private String gender;
     private String image;
     @Column(nullable = false)
     private int stock;
@@ -32,85 +32,30 @@ public class ProductDetailEntity {
 
     public ProductDetailEntity() {
         this.id = null;
-        this.stock = -1;
-        this.price = -1L;
+        this.stock = 0;
+        this.price = 0L;
         this.status = 1;
     }
 
-    public ProductDetailEntity(String size) {
+    public ProductDetailEntity(String size, String origin, String gender, String image, int stock, Long price) {
+        this.id = null;
         this.size = size;
-        this.color = null;
-        this.material = null;
-        this.stock = -1;
-        this.price = -1L;
-        this.status = 1;
-    }
-
-    public ProductDetailEntity(ProductEntity product) {
-        this.size = null;
-        this.color = null;
-        this.material = null;
-        this.stock = -1;
-        this.price = -1L;
-        this.status = 1;
-        this.product = product;
-    }
-
-    public ProductDetailEntity(String size, String color) {
-        this.size = size;
-        this.color = color;
-        this.material = null;
-        this.stock = -1;
-        this.price = -1L;
-        this.status = 1;
-    }
-
-    public ProductDetailEntity(String size, String color, String material) {
-        this.size = size;
-        this.color = color;
-        this.material = material;
-        this.stock = -1;
-        this.price = -1L;
-        this.status = 1;
-    }
-
-    public ProductDetailEntity(int stock) {
-        this.size = null;
-        this.color = null;
-        this.material = null;
-        this.stock = stock;
-        this.price = -1L;
-        this.status = 1;
-    }
-
-    public ProductDetailEntity(Long price) {
-        this.size = null;
-        this.color = null;
-        this.material = null;
-        this.stock = -1;
-        this.price = price;
-        this.status = 1;
-    }
-
-    public ProductDetailEntity(String size, String color, String material, String image, int stock, Long price, ProductEntity product) {
-        this.size = size;
-        this.color = color;
-        this.material = material;
+        this.origin = origin;
+        this.gender = gender;
         this.image = image;
         this.stock = stock;
         this.price = price;
-        this.status = 1;
-        this.product = product;
     }
 
-    public ProductDetailEntity(Long id, String size, String color, String material, String image, int stock, Long price, ProductEntity product, List<CartEntity> orders) {
+    public ProductDetailEntity(Long id, String size, String origin, String gender, String image, int stock, Long price, int status, ProductEntity product, List<CartEntity> orders) {
         this.id = id;
         this.size = size;
-        this.color = color;
-        this.material = material;
+        this.origin = origin;
+        this.gender = gender;
         this.image = image;
         this.stock = stock;
         this.price = price;
+        this.status = status;
         this.product = product;
         this.orders = orders;
     }
@@ -131,20 +76,20 @@ public class ProductDetailEntity {
         this.size = size;
     }
 
-    public String getColor() {
-        return color;
+    public String getOrigin() {
+        return origin;
     }
 
-    public void setColor(String color) {
-        this.color = color;
+    public void setOrigin(String origin) {
+        this.origin = origin;
     }
 
-    public String getMaterial() {
-        return material;
+    public String getGender() {
+        return gender;
     }
 
-    public void setMaterial(String material) {
-        this.material = material;
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 
     public int getStock() {

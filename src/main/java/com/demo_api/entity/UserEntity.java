@@ -6,13 +6,18 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users",  uniqueConstraints = {
+        @UniqueConstraint(columnNames = "username"),
+        @UniqueConstraint(columnNames = "email")
+})
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    private String name;
+    private String username;
+    @Column(nullable = false)
+    private String email;
     @Column(nullable = false)
     private String password;
     @Column(nullable = false)
@@ -34,39 +39,35 @@ public class UserEntity {
         this.status = 1;
     }
 
-    public UserEntity(String name, String password) {
-        this.name = name;
+    public UserEntity(String username, String email, String password) {
+        this.username = username;
         this.password = password;
+        this.email = email;
         this.status = 1;
         this.role = null;
     }
 
-    public UserEntity(String name, String password, int status) {
-        this.name = name;
+    public UserEntity(String username, String password, String email, RoleEntity role) {
+        this.username = username;
         this.password = password;
-        this.status = status;
-        this.role = null;
-    }
-
-    public UserEntity(String name, String password, RoleEntity role, int status) {
-        this.name = name;
-        this.password = password;
+        this.email = email;
         this.role = role;
-        this.status = status;
+        this.status = 1;
     }
 
-    public UserEntity(Long id, String name, String password, int status, @Nullable RoleEntity role, List<CartEntity> carts) {
+    public UserEntity(Long id, String username, String password, int status, @Nullable RoleEntity role, List<CartEntity> carts) {
         this.id = id;
-        this.name = name;
+        this.username = username;
         this.password = password;
         this.status = status;
         this.role = role;
         this.carts = carts;
     }
 
-    public UserEntity(Long id, String name, String password, int status, @Nullable RoleEntity role, List<OrderEntity> orders, List<CartEntity> carts) {
+    public UserEntity(Long id, String username, String email, String password, int status, @Nullable RoleEntity role, List<OrderEntity> orders, List<CartEntity> carts) {
         this.id = id;
-        this.name = name;
+        this.username = username;
+        this.email = email;
         this.password = password;
         this.status = status;
         this.role = role;
@@ -82,12 +83,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -128,5 +129,13 @@ public class UserEntity {
 
     public void setCarts(List<CartEntity> carts) {
         this.carts = carts;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

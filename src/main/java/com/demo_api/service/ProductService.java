@@ -38,7 +38,7 @@ public class ProductService {
         return repository.save(oldProduct);
     }
 
-    public void delete(Long id){
+    public String delete(Long id){
         if(repository.findById(id).isPresent()){
             ProductEntity product = repository.findById(id).get();
             product.setStatus(0);
@@ -47,7 +47,9 @@ public class ProductService {
                 productDetailRepository.save(detail);
             }
             repository.save(product);
+            return "DELETED";
         }
+        return "ERROR";
     }
     public ProductEntity save(ProductEntity product){
         return repository.save(product);

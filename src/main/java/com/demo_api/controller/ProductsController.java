@@ -16,6 +16,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,6 +38,9 @@ public class ProductsController {
     ProductDetailModelAssembler detailAssembler;
     @Autowired
     PagedResourcesAssembler<ProductEntity> pagedResourcesAssembler;
+
+    //Get one
+    //Lấy sản phẩm có id là "1": http://localhost:8060/products/1
     @GetMapping(value = "/{id}")
     public ResponseEntity<EntityModel<Product>> getOne(@PathVariable Long id) {
         ProductEntity product = productService.get(id);
@@ -47,7 +51,7 @@ public class ProductsController {
     }
 
     //Get all details of provided product
-    //Test with: http://localhost:8060/products/1/details
+    //Lấy tất cả chi tiết của sản phẩm có id là 1: http://localhost:8060/products/1/details
     @GetMapping(value = "/{id}/details")
     public ResponseEntity<CollectionModel<EntityModel<ProductDetail>>> getDetails(@PathVariable Long id) {
         List<EntityModel<ProductDetail>> details = detailService.getByProductId(id).stream()
@@ -59,12 +63,15 @@ public class ProductsController {
     }
 
     //Get all with paging
-    //find by name and status: http://localhost:8060/products?name=nike&status=1&page=0&size=2&sort=id,asc
-    //find by status: http://localhost:8060/products?status=0&page=0&size=2&sort=id,asc
-    //find by name: http://localhost:8060/products?name=vans&page=0&size=2&sort=id,asc
-    //find all: http://localhost:8060/products?page=0&size=2&sort=id,asc
+    //Tìm sản phẩm theo tên "nike" và trạng thái "1"(đang kinh doanh): http://localhost:8060/products?name=nike&status=1&page=0&size=2&sort=id,asc
+    //Tìm sản phẩm theo trạng thái "0"(ngừng kinh doanh): http://localhost:8060/products?status=0&page=0&size=2&sort=id,asc
+    //Chỉ tìm theo tên sản phẩm đang kinh doanh: http://localhost:8060/products?name=vans
+    //Tìm hết: http://localhost:8060/products?&status=-1&page=0&size=5&sort=id,asc
+    //Chú ý: status:    0-> ngừng kinh doanh,
+    //                  1-> đang kinh doanh (mặc định),
+    //                  -1-> lấy hết
     @GetMapping()
-    public ResponseEntity<PagedModel<EntityModel<Product>>> getAll(@RequestParam(defaultValue = "-1") int status,
+    public ResponseEntity<PagedModel<EntityModel<Product>>> getAll(@RequestParam(defaultValue = "1") int status,
                                                                    @RequestParam(defaultValue = "*") String name,
                                                                    Pageable pageable) {
         Page<ProductEntity> products = productService.getAll(status, name, pageable);
@@ -75,7 +82,7 @@ public class ProductsController {
 
     //Add new
     //Test with: http://localhost:8060/products
-    //In request body: {"name": "VANS"}
+    //Thêm sản phẩm mới: {"name": "Giày FAKE"}
     @PostMapping()
     public ResponseEntity<EntityModel<Product>> addProduct(@RequestBody ProductEntity newProduct){
         try{
@@ -89,9 +96,9 @@ public class ProductsController {
     }
 
     //Update
-    //Test with: http://localhost:8060/products/1/update
+    //Update sản phẩm có id là "1": http://localhost:8060/products/1/update
     //In request body:
-    //To set role with no privileges: {"name": "NIKE"}
+    //Đặt lại tên sản phẩm: {"name": "Giày giả"}
     @PutMapping(value = "/{id}/update")
     public ResponseEntity<EntityModel<Product>> updateProduct(@RequestBody ProductEntity newProduct, @PathVariable Long id) {
         ProductEntity product = productService.get(id);
@@ -104,12 +111,13 @@ public class ProductsController {
 
     //Delete
     //Test with: http://localhost:8060/products/1/delete
+    //Trả về "DELETED" nêu xóa thành công (thực ra là set status = 0);
     @DeleteMapping("/{id}/delete")
+//    @PreAuthorize(value = "hasRole('Admin')")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         if(productService.get(id).getId() == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(assembler.toModel(new ProductEntity()),HttpStatus.NOT_FOUND);
         }
-        productService.delete(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(productService.delete(id),HttpStatus.OK);
     }
 }

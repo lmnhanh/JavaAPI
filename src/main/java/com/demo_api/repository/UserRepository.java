@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
@@ -19,4 +20,9 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     public Page<UserEntity> findByStatus(int status, Pageable pageable);
     @Query(value = "SELECT u FROM UserEntity u WHERE u.role.id = :id AND u.status = :status")
     public Page<UserEntity> findByStatusAndRole(@Param("status") int status, @Param("id") Long role, Pageable pageable);
+
+    public Optional<UserEntity> findByUsername(String name);
+    Boolean existsByUsername(String username);
+    Boolean existsByEmail(String email);
+
 }

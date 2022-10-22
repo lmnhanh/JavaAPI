@@ -3,14 +3,16 @@ package com.demo_api.model;
 public class Cart {
     private final Long id;
     private final int quantity;
-    private final int status;
+    private final Long price;
+    private final int stock;
 
     private final String message;
 
-    public Cart(Long id, int quantity, int status, String message) {
+    public Cart(Long id, int quantity, Long price, int stock, String message) {
         this.id = id;
         this.quantity = quantity;
-        this.status = status;
+        this.price = price;
+        this.stock = stock;
         this.message = message;
     }
 
@@ -22,7 +24,15 @@ public class Cart {
         return quantity;
     }
 
-    public int getStatus() {
-        return status;
+    public int getStock() {
+        return stock;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public Long getPrice() {
+        return price;
     }
 }

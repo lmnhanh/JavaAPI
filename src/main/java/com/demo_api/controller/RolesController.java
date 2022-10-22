@@ -41,6 +41,7 @@ public class RolesController {
     RoleService roleService;
 
     //Get one
+    //Test with:  http://localhost:8060/roles/1
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Role>> getOne(@PathVariable Long id) {
         RoleEntity role = roleService.get(id);
@@ -51,9 +52,10 @@ public class RolesController {
     }
 
     //Get all with paging
-    //Test with: http://localhost:8060/roles?page=0&size=2&sort=id,asc
-    //Test with: http://localhost:8060/roles?status=1
-    //Test with: http://localhost:8060/roles?privilege=1
+    //Lấy tất cả role với phân trang: http://localhost:8060/roles?page=0&size=2&sort=id,asc
+    //Lấy tất cả các role đang hoạt động: http://localhost:8060/roles?status=1
+    //Lấy tất cả các role có quyền có id là "1": http://localhost:8060/roles?privilege=1
+    //VD: Role nào có quyền "Delete product"
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Role>>> getAll(@RequestParam(defaultValue = "-1") int status,
                                                                 @RequestParam(defaultValue = "-1") Long privilege,
@@ -67,8 +69,8 @@ public class RolesController {
     //Add new
     //Test with: http://localhost:8060/roles
     //In request body:
-    //To add role with privileges: {"name": "Sales","privileges": [{"id": 1}]}
-    //To add role with no privileges: {"name": "Sales"}
+    //Thêm role mới với list các quyền đã có: {"name": "Sales","privileges": [{"id": 1}]}
+    //Thêm role không có quyền gì hết: {"name": "Sales"}
     @PostMapping()
     public ResponseEntity<EntityModel<Role>> addRole(@RequestBody RoleEntity newRole){
         try{
@@ -81,11 +83,10 @@ public class RolesController {
         }
     }
 
-    //Update
-    //Test with: http://localhost:8060/roles/1/update
+    //Update role có id là "1": http://localhost:8060/roles/1/update
     //In request body:
-    //To set role with no privileges: {"name": "Sales Manager"}
-    //To set role with privileges: {"name": "Sales Manager", "privileges":[{"id":1}]}
+    //Đặt lại tên và xóa hết các quyền: {"name": "Sales Manager"}
+    //Đặt lại tên và gán các quyền: {"name": "Sales Manager", "privileges":[{"id":1}]}
     @PutMapping(value = "/{id}/update")
     public ResponseEntity<EntityModel<Role>> updateRole(@RequestBody RoleEntity newRole, @PathVariable Long id) {
         RoleEntity role = roleService.get(id);
@@ -101,7 +102,8 @@ public class RolesController {
     }
 
     //Delete
-    //Test with: http://localhost:8060/roles/1/delete
+    //Xóa quyền có id là "1": http://localhost:8060/roles/1/delete
+    //Các user có quyền bị xóa thì role_id sẽ được gán = null;
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<?> deleteRole(@PathVariable Long id) {
         if(roleService.get(id).getId() == null){

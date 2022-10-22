@@ -35,6 +35,7 @@ public class PrivilegesController {
     PrivilegeModelAssembler assembler;
 
     //Get one
+    //Test with:  http://localhost:8060/privileges/1
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<Privilege>> getOne(@PathVariable Long id) {
         PrivilegeEntity privilege = privilegeService.get(id);
@@ -45,6 +46,7 @@ public class PrivilegesController {
     }
 
     //Get all
+    //Các quyền của role "1":  http://localhost:8060/privileges?role=1
     @GetMapping()
     public ResponseEntity<PagedModel<EntityModel<Privilege>>> getAll(@RequestParam(defaultValue = "-1") Long role, Pageable pageable){
         Page<PrivilegeEntity> privileges = privilegeService.getAll(role, pageable);

@@ -31,6 +31,11 @@ public class CartEntity {
         this.quantity = 0;
     }
 
+    public CartEntity(int quantity) {
+        this.id = null;
+        this.quantity = quantity;
+    }
+
     public CartEntity(UserEntity user, ProductDetailEntity detail, int quantity) {
         this.detail = detail;
         this.user = user;
@@ -39,10 +44,10 @@ public class CartEntity {
         this.status = 0;
     }
 
-    public CartEntity(Long id, int quantity, int status, ProductDetailEntity detail, UserEntity user, OrderEntity order) {
+    public CartEntity(Long id, int quantity, ProductDetailEntity detail, UserEntity user, OrderEntity order) {
         this.id = id;
         this.quantity = quantity;
-        this.status = status;
+        this.status = 0;
         this.detail = detail;
         this.user = user;
         this.order = order;
